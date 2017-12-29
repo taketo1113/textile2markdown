@@ -1,3 +1,15 @@
+# Textile2Markdown
+Forked from thewoolleyman/textile2markdown (https://github.com/thewoolleyman/textile2markdown)
+
+## Changed
+- lib/textile2markdown I/F, argument changed from filename to textile(string).
+- bin/textile2markdown argument options and default output which is STDIO.
+
+# TODO
+- Fix test
+
+## Original README
+
 Textile2Markdown
 
 Copyright: (c) 2008 Chad Woolley
