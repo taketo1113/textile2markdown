@@ -1,22 +1,47 @@
 #!/usr/bin/env ruby
 
-require "#{File.dirname(__FILE__)}/../lib/textile2markdown.rb"
-converter = Textile2Markdown.new
-textile_file = ARGV.first
-unless ARGV.size >= 1 && ARGV.size <= 2
-  puts "Usage: textile2markdown <textile input filename> [<markdown output filename>]" 
-  exit 1
+require 'optparse'
+require File.dirname(__FILE__) + '/../lib/textile2markdown.rb'
+
+if ARGV.size < 1
+  ARGV[0] = '-h'
 end
 
+options = Hash.new
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: #{script_name} [options] <textile input filename>"
 
-# args
+  opts.separator ""
+
+  opts.on("-o", "--output-file filename",
+          "Output markdown filename.") { |v| options[:output_file] = v }
+
+  opts.separator ""
+
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+# textile to markdown
+converter = Textile2Markdown.new
+
 textile_filename = ARGV[0]
-markdown_filename = ARGV[1] ||= "#{textile_filename}.markdown"
 
-# read textline file
 textile = IO.read(textile_filename)
+markdown = converter.convert(textile)
 
-# output
-File.open(markdown_filename, 'w') do |markdown_file|
-  markdown_file.write(converter.convert(textile))
+if options[:output_file]
+  markdown_filename = options[:output_file] # || "#{textile_filename}.markdown"
+
+  File.open(markdown_filename, 'w') do |markdown_file|
+    markdown_file.write(markdown)
+  end
+
+else
+  # output stdout
+  print markdown
+
 end
