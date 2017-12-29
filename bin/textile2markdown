@@ -7,4 +7,16 @@ unless ARGV.size >= 1 && ARGV.size <= 2
   puts "Usage: textile2markdown <textile input filename> [<markdown output filename>]" 
   exit 1
 end
-exit converter.convert_file(ARGV[0], ARGV[1])
+
+
+# args
+textile_filename = ARGV[0]
+markdown_filename = ARGV[1] ||= "#{textile_filename}.markdown"
+
+# read textline file
+textile = IO.read(textile_filename)
+
+# output
+File.open(markdown_filename, 'w') do |markdown_file|
+  markdown_file.write(converter.convert(textile))
+end

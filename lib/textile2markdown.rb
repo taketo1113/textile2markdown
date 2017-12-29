@@ -1,13 +1,12 @@
 class Textile2Markdown
-  def convert_file(textile_filename, markdown_filename = nil)
-    markdown_filename ||= "#{textile_filename}.markdown"
-    textile_lines = IO.readlines(textile_filename)
-    File.open(markdown_filename, 'w') do |markdown_file|
-      textile_lines.each do |textile_line|
-        markdown_file.write(convert_line(textile_line))
-      end
+  def convert(textile)
+    md = ''
+
+    textile.each_line do |textile_line|
+      md += convert_line(textile_line)
     end
-    0
+
+    md
   end
   
   def convert_line(input)
